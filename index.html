@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blind Coding Portal - Ultimate Challenge</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;700&family=Orbitron:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary-bg: #0a0a0f;
+        --secondary-bg: #1a1a2e;
+        --accent-purple: #6c5ce7;
+        --accent-blue: #74b9ff;
+        --accent-gold: #fdcb6e;
+        --text-primary: #ffffff;
+        --text-secondary: #b2bec3;
+        --danger: #e17055;
+        --success: #00b894;
+        --blindfold-shadow: rgba(108, 92, 231, 0.3);
+        --problem-bg: rgba(26, 26, 46, 0.95);
+        --code-bg: rgba(10, 10, 15, 0.95);
+        --border-gradient: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      }
+
+      body {
+        font-family: "Fira Code", monospace;
+        background: linear-gradient(
+          135deg,
+          var(--primary-bg) 0%,
+          var(--secondary-bg) 100%
+        );
+        color: var(--text-primary);
+        overflow-x: hidden;
+        position: relative;
+        min-height: 100vh;
+      }
+
+      /* Animated Background */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at 20% 80%,
+            rgba(108, 92, 231, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(116, 185, 255, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 40%,
+            rgba(253, 203, 110, 0.05) 0%,
+            transparent 50%
+          );
+        animation: backgroundShift 20s ease-in-out infinite;
+        z-index: -1;
+      }
+
+      @keyframes backgroundShift {
+        0%,
+        100% {
+          transform: scale(1) rotate(0deg);
+        }
+        50% {
+          transform: scale(1.1) rotate(2deg);
+        }
+      }
+
+      /* Floating particles */
+      .particle {
+        position: fixed;
+        width: 4px;
+        height: 4px;
+        background: var(--accent-purple);
+        border-radius: 50%;
+        animation: float 15s infinite linear;
+        z-index: -1;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(100vh) translateX(-100px);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100vh) translateX(100px);
+          opacity: 0;
+        }
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      /* Login Screen Styles */
+      .login-screen {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        position: relative;
+        animation: fadeIn 1s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .blindfold-logo {
+        width: 120px;
+        height: 60px;
+        background: linear-gradient(
+          135deg,
+          var(--accent-purple),
+          var(--accent-blue)
+        );
+        border-radius: 30px;
+        position: relative;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 30px var(--blindfold-shadow);
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      .blindfold-logo::before {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: -20px;
+        right: -20px;
+        height: 70px;
+        background: linear-gradient(
+          135deg,
+          transparent 40%,
+          rgba(108, 92, 231, 0.1) 50%,
+          transparent 60%
+        );
+        border-radius: 40px;
+        animation: shimmer 3s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      .main-title {
+        font-family: "Orbitron", monospace;
+        font-size: 3.5rem;
+        font-weight: 900;
+        background: linear-gradient(
+          135deg,
+          var(--accent-purple),
+          var(--accent-blue),
+          var(--accent-gold)
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-align: center;
+        margin-bottom: 10px;
+        animation: titleGlow 3s ease-in-out infinite;
+      }
+
+      @keyframes titleGlow {
+        0%,
+        100% {
+          filter: drop-shadow(0 0 10px rgba(108, 92, 231, 0.5));
+        }
+        50% {
+          filter: drop-shadow(0 0 20px rgba(116, 185, 255, 0.8));
+        }
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        text-align: center;
+        margin-bottom: 40px;
+        animation: fadeInUp 1s 0.5s both;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .login-container {
+        background: rgba(26, 26, 46, 0.8);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(108, 92, 231, 0.2);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        animation: slideUp 1s 0.3s both;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .login-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(108, 92, 231, 0.1),
+          transparent
+        );
+        animation: loginShine 3s ease-in-out infinite;
+      }
+
+      @keyframes loginShine {
+        0% {
+          left: -100%;
+        }
+        50% {
+          left: 100%;
+        }
+        100% {
+          left: 100%;
+        }
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .access-input {
+        width: 300px;
+        padding: 15px 20px;
+        border: 2px solid rgba(108, 92, 231, 0.3);
+        border-radius: 12px;
+        background: rgba(10, 10, 15, 0.8);
+        color: var(--text-primary);
+        font-size: 16px;
+        font-family: "Fira Code", monospace;
+        transition: all 0.3s ease;
+        text-align: center;
+        letter-spacing: 2px;
+      }
+
+      .access-input:focus {
+        outline: none;
+        border-color: var(--accent-purple);
+        box-shadow: 0 0 20px rgba(108, 92, 231, 0.4);
+        transform: scale(1.02);
+      }
+
+      .enter-btn {
+        margin-top: 25px;
+        padding: 15px 40px;
+        background: linear-gradient(
+          135deg,
+          var(--accent-purple),
+          var(--accent-blue)
+        );
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .enter-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(108, 92, 231, 0.4);
+      }
+
+      .enter-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .enter-btn:hover::before {
+        left: 100%;
+      }
+
+      .error-message {
+        color: var(--danger);
+        text-align: center;
+        margin-top: 15px;
+        font-weight: 500;
+        animation: shake 0.5s ease-in-out;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+      }
+
+      /* Coding Screen Styles */
+      .coding-screen {
+        padding: 40px;
+        animation: fadeIn 1s ease-out;
+        min-height: 100vh;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .competition-title {
+        font-family: "Orbitron", monospace;
+        font-size: 2.5rem;
+        font-weight: 900;
+        background: linear-gradient(
+          135deg,
+          var(--accent-purple),
+          var(--accent-gold)
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 10px;
+      }
+
+      .team-info {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+      }
+
+      /* Timer Styles */
+      .timer-container {
+        background: rgba(26, 26, 46, 0.9);
+        border: 2px solid var(--accent-purple);
+        border-radius: 15px;
+        padding: 20px;
+        margin: 0 auto 30px;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(108, 92, 231, 0.3);
+        position: sticky;
+        top: 20px;
+        z-index: 100;
+      }
+
+      .timer-label {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        margin-bottom: 10px;
+      }
+
+      .timer-display {
+        font-family: "Orbitron", monospace;
+        font-size: 3rem;
+        font-weight: 900;
+        color: var(--accent-gold);
+        text-shadow: 0 0 20px rgba(253, 203, 110, 0.5);
+        animation: timerPulse 1s ease-in-out infinite;
+      }
+
+      @keyframes timerPulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .timer-warning {
+        color: var(--danger) !important;
+        animation: timerBlink 0.5s ease-in-out infinite;
+      }
+
+      @keyframes timerBlink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      /* Enhanced Problem Styles */
+      .problems-container {
+        display: grid;
+        gap: 40px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .problem-card {
+        background: var(--problem-bg);
+        backdrop-filter: blur(15px);
+        border: 2px solid transparent;
+        background-image: var(--border-gradient);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        border-radius: 24px;
+        padding: 0;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .problem-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: var(--border-gradient);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s ease;
+        border-radius: 24px 24px 0 0;
+      }
+
+      .problem-card:hover::before {
+        transform: scaleX(1);
+      }
+
+      .problem-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 60px rgba(108, 92, 231, 0.3);
+        border-color: var(--accent-purple);
+      }
+
+      .problem-inner {
+        background: var(--problem-bg);
+        border-radius: 22px;
+        padding: 35px;
+        height: 100%;
+      }
+
+      .problem-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid rgba(108, 92, 231, 0.2);
+      }
+
+      .problem-icon {
+        width: 50px;
+        height: 50px;
+        background: var(--border-gradient);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 900;
+        font-size: 1.4rem;
+        box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+      }
+
+      .problem-title {
+        font-family: "Orbitron", monospace;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--accent-blue);
+        margin: 0;
+      }
+
+      .problem-difficulty {
+        background: rgba(253, 203, 110, 0.2);
+        color: var(--accent-gold);
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-left: auto;
+      }
+
+      .problem-content {
+        margin-bottom: 25px;
+      }
+
+      .problem-description {
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        line-height: 1.7;
+        margin-bottom: 20px;
+        background: rgba(10, 10, 15, 0.3);
+        padding: 20px;
+        border-radius: 12px;
+        border-left: 4px solid var(--accent-purple);
+      }
+
+      .problem-specs {
+        display: grid;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .spec-section {
+        background: rgba(10, 10, 15, 0.4);
+        border-radius: 10px;
+        padding: 15px;
+        border-left: 3px solid var(--accent-blue);
+      }
+
+      .spec-title {
+        font-weight: 700;
+        color: var(--accent-blue);
+        font-size: 1rem;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .spec-content {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        font-family: "Fira Code", monospace;
+      }
+
+      .input-output-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin: 15px 0;
+      }
+
+      .example-box {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(108, 92, 231, 0.3);
+        border-radius: 8px;
+        padding: 12px;
+      }
+
+      .example-title {
+        font-size: 0.85rem;
+        color: var(--accent-gold);
+        font-weight: 600;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+      }
+
+      .example-content {
+        font-family: "Fira Code", monospace;
+        font-size: 0.9rem;
+        color: var(--text-primary);
+        white-space: pre-line;
+      }
+
+      .constraints {
+        background: rgba(225, 112, 85, 0.1);
+        border: 1px solid var(--danger);
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 15px;
+      }
+
+      .constraints-title {
+        color: var(--danger);
+        font-weight: 700;
+        margin-bottom: 8px;
+        font-size: 1rem;
+      }
+
+      .constraints-list {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      .code-textarea {
+        width: 100%;
+        min-height: 250px;
+        background: var(--code-bg);
+        border: 2px solid rgba(108, 92, 231, 0.3);
+        border-radius: 15px;
+        padding: 25px;
+        color: var(--text-primary);
+        font-family: "Fira Code", monospace;
+        font-size: 15px;
+        line-height: 1.6;
+        resize: vertical;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .code-textarea:focus {
+        outline: none;
+        border-color: var(--accent-purple);
+        box-shadow: 0 0 25px rgba(108, 92, 231, 0.4), inset 0 2px 10px rgba(0, 0, 0, 0.2);
+        transform: scale(1.01);
+      }
+
+      .code-textarea::placeholder {
+        color: rgba(178, 190, 195, 0.4);
+        font-style: italic;
+      }
+
+      /* Submit Button */
+      .submit-container {
+        text-align: center;
+        margin-top: 50px;
+        padding: 20px;
+      }
+
+      .submit-btn {
+        padding: 25px 60px;
+        background: linear-gradient(135deg, var(--success), var(--accent-blue));
+        border: none;
+        border-radius: 20px;
+        color: white;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0, 184, 148, 0.3);
+      }
+
+      .submit-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 25px 50px rgba(0, 184, 148, 0.4);
+      }
+
+      .submit-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .submit-btn:hover::before {
+        left: 100%;
+      }
+
+      .submit-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* Auto-submit notification */
+      .auto-submit-warning {
+        background: rgba(225, 112, 85, 0.1);
+        border: 2px solid var(--danger);
+        border-radius: 12px;
+        padding: 15px;
+        margin: 20px auto;
+        max-width: 600px;
+        text-align: center;
+        color: var(--danger);
+        font-weight: 500;
+        animation: warningPulse 2s ease-in-out infinite;
+      }
+
+      @keyframes warningPulse {
+        0%,
+        100% {
+          border-color: var(--danger);
+        }
+        50% {
+          border-color: rgba(225, 112, 85, 0.5);
+        }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1024px) {
+        .input-output-container {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .main-title {
+          font-size: 2.5rem;
+        }
+
+        .login-container {
+          margin: 20px;
+          padding: 30px;
+        }
+
+        .access-input {
+          width: 100%;
+        }
+
+        .coding-screen {
+          padding: 20px;
+        }
+
+        .timer-display {
+          font-size: 2rem;
+        }
+
+        .problem-inner {
+          padding: 25px;
+        }
+
+        .problem-header {
+          flex-direction: column;
+          text-align: center;
+          gap: 10px;
+        }
+
+        .problem-difficulty {
+          margin: 0;
+        }
+
+        .problem-title {
+          font-size: 1.5rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .main-title {
+          font-size: 2rem;
+        }
+
+        .timer-display {
+          font-size: 1.5rem;
+        }
+
+        .submit-btn {
+          width: 100%;
+          padding: 20px;
+        }
+
+        .problem-inner {
+          padding: 20px;
+        }
+      }
+
+      @keyframes fadeOut {
+        from { opacity: 1; transform: scale(1); }
+        to { opacity: 0; transform: scale(0); }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Animated particles -->
+    <div class="particles-container"></div>
+
+    <!-- LOGIN SCREEN -->
+    <div class="login-screen" id="loginScreen">
+      <div class="blindfold-logo"></div>
+      <h1 class="main-title">BLIND CODE</h1>
+      <p class="subtitle">Ultimate Coding Challenge • Team of 2 • 30 Minutes</p>
+
+      <div class="login-container">
+        <h3
+          style="
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+          "
+        >
+          Enter Access Code
+        </h3>
+        <input
+          type="password"
+          class="access-input"
+          id="secretCode"
+          placeholder="••••••••"
+          maxlength="20"
+        />
+        <div class="error-message" id="errorMsg"></div>
+        <button class="enter-btn" onclick="validateCode()">ENTER ARENA</button>
+      </div>
+    </div>
+
+    <!-- CODING SCREEN -->
+    <div class="coding-screen hidden" id="codingScreen">
+      <div class="header">
+        <h1 class="competition-title">BLIND CODING ARENA</h1>
+        <p class="team-info">
+          👥 Team Challenge • One Blindfolded Coder • One Navigator • No Direct Input
+        </p>
+      </div>
+
+      <!-- Timer -->
+      <div class="timer-container">
+        <div class="timer-label">⏱️ Time Remaining</div>
+        <div class="timer-display" id="timerDisplay">30:00</div>
+      </div>
+
+      <!-- Auto-submit warning (hidden initially) -->
+      <div class="auto-submit-warning hidden" id="autoSubmitWarning">
+        ⚠️ Time's up! Auto-submitting your solutions...
+      </div>
+
+      <!-- Problems -->
+      <div class="problems-container">
+        <!-- Problem 1 -->
+        <div class="problem-card">
+          <div class="problem-inner">
+            <div class="problem-header">
+              <div class="problem-icon">1</div>
+              <h2 class="problem-title">Even Number Checker</h2>
+              <div class="problem-difficulty">Easy</div>
+            </div>
+            
+            <div class="problem-content">
+              <div class="problem-description">
+                Write a program that determines whether a given integer is even or odd. Your program should read an integer and output "Even" if the number is divisible by 2, otherwise output "Odd".
+              </div>
+
+              <div class="problem-specs">
+                <div class="spec-section">
+                  <div class="spec-title">📥 Input Format</div>
+                  <div class="spec-content">A single integer n (-10^9 ≤ n ≤ 10^9)</div>
+                </div>
+
+                <div class="spec-section">
+                  <div class="spec-title">📤 Output Format</div>
+                  <div class="spec-content">Print "Even" if the number is even, "Odd" if the number is odd</div>
+                </div>
+              </div>
+
+              <div class="input-output-container">
+                <div class="example-box">
+                  <div class="example-title">Sample Input</div>
+                  <div class="example-content">4</div>
+                </div>
+                <div class="example-box">
+                  <div class="example-title">Sample Output</div>
+                  <div class="example-content">Even</div>
+                </div>
+              </div>
+
+              <div class="input-output-container">
+                <div class="example-box">
+                  <div class="example-title">Sample Input</div>
+                  <div class="example-content">7</div>
+                </div>
+                <div class="example-box">
+                  <div class="example-title">Sample Output</div>
+                  <div class="example-content">Odd</div>
+                </div>
+              </div>
+
+              <div class="constraints">
+                <div class="constraints-title">⚠️ Constraints</div>
+                <div class="constraints-list">
+                  • The input will always be a valid integer<br>
+                  • Consider negative numbers as well<br>
+                  • Time Limit: 1 second<br>
+                  • Memory Limit: 256 MB
+                </div>
+              </div>
+            </div>
+
+            <textarea
+              class="code-textarea"
+              id="code1"
+              placeholder="// Write your solution for Problem 1 here..."
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Problem 2 -->
+        <div class="problem-card">
+          <div class="problem-inner">
+            <div class="problem-header">
+              <div class="problem-icon">2</div>
+              <h2 class="problem-title">Missing Number Detective</h2>
+              <div class="problem-difficulty">Medium</div>
+            </div>
+            
+            <div class="problem-content">
+              <div class="problem-description">
+                You are given an array containing n-1 distinct integers from the range [1, n]. Exactly one number from this range is missing. Your task is to find and return the missing number efficiently.
+              </div>
+
+              <div class="problem-specs">
+                <div class="spec-section">
+                  <div class="spec-title">📥 Input Format</div>
+                  <div class="spec-content">
+                    First line: An integer n (2 ≤ n ≤ 10^6)<br>
+                    Second line: n-1 space-separated distinct integers from range [1, n]
+                  </div>
+                </div>
+
+                <div class="spec-section">
+                  <div class="spec-title">📤 Output Format</div>
+                  <div class="spec-content">A single integer representing the missing number</div>
+                </div>
+              </div>
+
+              <div class="input-output-container">
+                <div class="example-box">
+                  <div class="example-title">Sample Input</div>
+                  <div class="example-content">5
+1 2 4 5</div>
+                </div>
+                <div class="example-box">
+                  <div class="example-title">Sample Output</div>
+                  <div class="example-content">3</div>
+                </div>
+              </div>
+
+              <div class="spec-section">
+                <div class="spec-title">💡 Explanation</div>
+                <div class="spec-content">
+                  The range is [1, 2, 3, 4, 5]. The array contains [1, 2, 4, 5]. Missing number is 3.
+                </div>
+              </div>
+
+              <div class="constraints">
+                <div class="constraints-title">⚠️ Constraints</div>
+                <div class="constraints-list">
+                  • 2 ≤ n ≤ 10^6<br>
+                  • All numbers in array are distinct<br>
+                  • All numbers are in range [1, n]<br>
+                  • Solve in O(n) time and O(1) space<br>
+                  • Time Limit: 1 second
+                </div>
+              </div>
+            </div>
+
+            <textarea
+              class="code-textarea"
+              id="code2"
+              placeholder="// Write your solution for Problem 2 here..."
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="submit-container">
+        <button class="submit-btn" id="submitBtn" onclick="submitToForm()">
+          🚀 SUBMIT SOLUTIONS
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Create floating particles
+      function createParticles() {
+        const particlesContainer = document.querySelector(
+          ".particles-container"
+        );
+        for (let i = 0; i < 20; i++) {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+          particle.style.left = Math.random() * 100 + "vw";
+          particle.style.animationDelay = Math.random() * 15 + "s";
+          particle.style.animationDuration = Math.random() * 10 + 10 + "s";
+          particlesContainer.appendChild(particle);
+        }
+      }
+
+      // Timer variables
+      let timerInterval;
+      let timeRemaining = 30 * 60; // 30 minutes in seconds
+      let isTimerRunning = false;
+      let hasSubmitted = false; // Prevent multiple submissions
+
+      // Initialize particles
+      createParticles();
+
+      // Login validation
+      function validateCode() {
+        const code = document.getElementById("secretCode").value.trim();
+        const error = document.getElementById("errorMsg");
+
+        if (code === "2005") {
+          document.getElementById("loginScreen").classList.add("hidden");
+          document.getElementById("codingScreen").classList.remove("hidden");
+          startTimer();
+        } else {
+          error.textContent = "❌ Access Denied! Try again...";
+          document.getElementById("secretCode").value = "";
+          document.getElementById("secretCode").focus();
+        }
+      }
+
+      // Allow Enter key to submit login
+      document
+        .getElementById("secretCode")
+        .addEventListener("keypress", function (event) {
+          if (event.key === "Enter") {
+            validateCode();
+          }
+        });
+
+      // Timer functions
+      function startTimer() {
+        if (isTimerRunning) return;
+
+        isTimerRunning = true;
+        timerInterval = setInterval(updateTimer, 1000);
+      }
+
+      function updateTimer() {
+        const timerDisplay = document.getElementById("timerDisplay");
+
+        if (timeRemaining <= 0) {
+          // Time's up - auto submit
+          clearInterval(timerInterval);
+          autoSubmit();
+          return;
+        }
+
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+
+        const formattedTime = `${minutes.toString().padStart(2, "0")}:${seconds
+          .toString()
+          .padStart(2, "0")}`;
+        timerDisplay.textContent = formattedTime;
+
+        // Add warning animation when less than 5 minutes
+        if (timeRemaining <= 300) {
+          timerDisplay.classList.add("timer-warning");
+        }
+
+        // Show auto-submit warning when less than 10 seconds
+        if (timeRemaining <= 10 && timeRemaining > 0) {
+          document
+            .getElementById("autoSubmitWarning")
+            .classList.remove("hidden");
+        }
+
+        timeRemaining--;
+      }
+
+      function autoSubmit() {
+        if (hasSubmitted) return; // Prevent multiple submissions
+        
+        const timerDisplay = document.getElementById("timerDisplay");
+        const submitBtn = document.getElementById("submitBtn");
+
+        timerDisplay.textContent = "00:00";
+        timerDisplay.classList.add("timer-warning");
+
+        // Show final warning
+        document.getElementById("autoSubmitWarning").classList.remove("hidden");
+        document.getElementById("autoSubmitWarning").textContent =
+          "⏰ Time's Up! Auto-submitting your code...";
+
+        // Disable submit button
+        submitBtn.disabled = true;
+        submitBtn.textContent = "⏰ AUTO-SUBMITTING...";
+
+        // Auto-submit after 2 seconds
+        setTimeout(() => {
+          openFormWithData();
+        }, 2000);
+      }
+
+      function submitToForm() {
+        if (hasSubmitted) return; // Prevent multiple submissions
+        
+        // Stop timer
+        if (timerInterval) {
+          clearInterval(timerInterval);
+        }
+
+        // Update submit button
+        const submitBtn = document.getElementById("submitBtn");
+        submitBtn.textContent = "🚀 SUBMITTING...";
+        submitBtn.disabled = true;
+
+        // Open form after brief delay
+        setTimeout(() => {
+          openFormWithData();
+        }, 500);
+      }
+
+      function openFormWithData() {
+        if (hasSubmitted) return; // Prevent multiple submissions
+        hasSubmitted = true;
+        
+        const code1 = encodeURIComponent(
+          document.getElementById("code1").value || "// No solution provided"
+        );
+        const code2 = encodeURIComponent(
+          document.getElementById("code2").value || "// No solution provided"
+        );
+
+        const baseURL =
+          "https://docs.google.com/forms/d/e/1FAIpQLSfzD4TULB0papGbvbeV3EFjW3xuoLb7seH7yyiXVSJUjMFXTA/viewform";
+        const fullURL = `${baseURL}?entry.1642923190=${code1}&entry.1100551590=${code2}`;
+
+        // Update submit button to show completion
+        const submitBtn = document.getElementById("submitBtn");
+        submitBtn.textContent = "✅ OPENING FORM...";
+
+        // Try to open in new tab first
+        const newWindow = window.open(fullURL, '_blank');
+        
+        // Check if popup was blocked
+        setTimeout(() => {
+          if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+            // Popup was blocked, open in current window
+            submitBtn.textContent = "✅ REDIRECTING...";
+            window.location.href = fullURL;
+          } else {
+            // Successfully opened in new tab
+            submitBtn.textContent = "✅ FORM OPENED IN NEW TAB";
+          }
+        }, 100);
+      }
+
+      // Add some interactive effects
+      document.addEventListener("mousemove", (e) => {
+        if (Math.random() > 0.99) {
+          // Rare effect
+          const sparkle = document.createElement("div");
+          sparkle.style.position = "fixed";
+          sparkle.style.left = e.clientX + "px";
+          sparkle.style.top = e.clientY + "px";
+          sparkle.style.width = "4px";
+          sparkle.style.height = "4px";
+          sparkle.style.background = "#6c5ce7";
+          sparkle.style.borderRadius = "50%";
+          sparkle.style.pointerEvents = "none";
+          sparkle.style.animation = "fadeOut 1s forwards";
+          document.body.appendChild(sparkle);
+
+          setTimeout(() => sparkle.remove(), 1000);
+        }
+      });
+
+      // Auto-focus on first textarea when coding screen loads (only once)
+      let hasAutoFocused = false;
+      document
+        .getElementById("codingScreen")
+        .addEventListener("transitionend", () => {
+          if (
+            !document
+              .getElementById("codingScreen")
+              .classList.contains("hidden") &&
+            !hasAutoFocused
+          ) {
+            setTimeout(() => {
+              document.getElementById("code1").focus();
+              hasAutoFocused = true;
+            }, 500);
+          }
+        });
+
+      // Prevent accidental page refresh/close during coding
+      window.addEventListener('beforeunload', function (e) {
+        if (isTimerRunning && !hasSubmitted) {
+          e.preventDefault();
+          e.returnValue = 'Are you sure you want to leave? Your progress will be lost.';
+        }
+      });
+
+      // Add keyboard shortcuts
+      document.addEventListener('keydown', function(e) {
+        // Ctrl/Cmd + Enter to submit
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          if (!hasSubmitted && !document.getElementById("codingScreen").classList.contains("hidden")) {
+            submitToForm();
+          }
+        }
+      });
+      // Function to handle tab key in textareas
+function handleTabKey(textarea) {
+  textarea.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') {
+      e.preventDefault(); // Prevent default tab behavior
+      
+      // Get cursor position
+      const start = this.selectionStart;
+      const end = this.selectionEnd;
+      
+      // Insert tab character at cursor position
+      const value = this.value;
+      this.value = value.substring(0, start) + '\t' + value.substring(end);
+      
+      // Move cursor after the inserted tab
+      this.selectionStart = this.selectionEnd = start + 1;
+    }
+  });
+}
+
+// Apply tab handling to both textareas
+document.addEventListener('DOMContentLoaded', function() {
+  const code1 = document.getElementById('code1');
+  const code2 = document.getElementById('code2');
+  
+  if (code1) handleTabKey(code1);
+  if (code2) handleTabKey(code2);
+});
+
+// Alternative: If you want to apply to all textareas automatically
+function enableTabInAllTextareas() {
+  const textareas = document.querySelectorAll('textarea.code-textarea');
+  textareas.forEach(textarea => {
+    handleTabKey(textarea);
+  });
+}
+
+// Call this function after your page loads
+// enableTabInAllTextareas();
+    </script>
+  </body>
+</html>
